@@ -1,0 +1,23 @@
+name: olareg
+
+services:
+  registry:
+    container_name: registry-mirror
+    image: registry:2
+    ports:
+      - "443:443"
+    environment:
+      - REGISTRY_HTTP_ADDR=0.0.0.0:443
+      - REGISTRY_HTTP_TLS_CERTIFICATE=/certs/mirror.domain.cc.crt
+      - REGISTRY_HTTP_TLS_KEY=/certs/mirror.domain.cc.key
+      - REGISTRY_STORAGE_DELETE_ENABLED=true
+    volumes:
+      - ${PWD}/certs:/certs
+      - ${PWD}/config.yml:/etc/docker/registry/config.yml
+      - image-data:/var/lib/registry
+
+volumes:
+  image-data:
+    name: image-data
+    driver: local
+
